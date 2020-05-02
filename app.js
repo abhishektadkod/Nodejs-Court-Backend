@@ -9,12 +9,13 @@ const axios = require("axios");
 
 var lawyerRouter = require('./routes/lawyer');
 var clientRouter = require('./routes/client');
+var url = process.env.MONGO_COURT;
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const court="Court"
 
 
-app.use(cors({origin:['http://localhost:3000','http://192.168.1.8:3000'],credentials: true,}))
+app.use(cors({origin:['http://localhost:3000','http://192.168.1.8:3000','https://pacific-bastion-93687.herokuapp.com'],credentials: true,}))
 
 
 app.use(bodyParser.json());
@@ -80,7 +81,7 @@ const clientsoc=(id)=>{
 const getApiAndEmit = async (socket,lawyer) => {
     try {
       const cases = await axios.get(
-        "http://localhost:4000/lawyer/select/"+lawyer
+        "https://safe-taiga-19842.herokuapp.com/lawyer/select/"+lawyer
       ); 
       socket.emit("F",cases.data); // Emitting a new message. It will be consumed by the client
     } catch (error) {
@@ -93,7 +94,7 @@ const getApiAndEmit = async (socket,lawyer) => {
 
     try {
       const cases = await axios.get(
-        "http://localhost:4000/client/select/"+client
+        "https://safe-taiga-19842.herokuapp.com/client/select/"+client
       ); 
       socket.emit("F",cases.data); // Emitting a new message. It will be consumed by the client
     } catch (error) {
@@ -102,12 +103,7 @@ const getApiAndEmit = async (socket,lawyer) => {
   };
 
 
-
-app.listen(PORT, function() {
-    console.log("Server is running on Port: " + PORT);
-});
-
-server.listen(4001, () => console.log(`Listening on port ${4001}`));
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 
 exports.clientsoc = clientsoc;
